@@ -18,8 +18,12 @@ X_IC = [990,0,10,0];
 [t_ode,X_ode] = ode45(@(t,X) Epidemic_ode(t,X,alpha,beta,rho),t_span,X_IC);
 population_display(t_euler,X_euler,'Euler')
 population_display(t_ode,X_ode,'ode45')
-X_diff = X_ode - X_euler;
-population_display(t_ode,X_diff,'difference between')
+X_diff = vecnorm(X_ode - X_euler,1,2);
+figure
+plot(t_euler,X_diff)
+ylabel('Subpopulation (people)')
+xlabel('Time (days)')
+title('Norm of difference per day')
 %% range of alpha 
 alpha = 0.025:(0.05-0.025):1;
 %will be simulating using ode45 as a guess.
