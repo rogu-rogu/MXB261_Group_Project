@@ -3,7 +3,7 @@ clear all
 S0 = 990; E0 = 0; I0 = 10; R0 = 0;
 beta = 1/14;% Given
 T = 360;  % Period
-n_samples = 1000;  % Number of LHS samples
+n_samples = 10;  % Number of LHS samples
 
 lhs_samples_new = [rand(n_samples,1),rand(n_samples,1)];
 alphas_new = lhs_samples_new(:, 1);  % Alpha samples
@@ -47,3 +47,11 @@ legend('show');
 title('Successful Parameter Combinations: \alpha vs \rho');
 hold off;
 
+%% Plotting Latin Hypercube
+% % Only really works for low values of n_samples but hey! it makes sense!
+% figure
+% hold on 
+% scatter(alphas_new, rhos_new,'.')
+% grid on
+% xticks(0:1/n_samples:1), xticklabels({})
+% yticks(0:1/n_samples:1), yticklabels({})
