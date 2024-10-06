@@ -20,7 +20,7 @@ function [t, X] = gillespieSSA(alpha, beta, rho, X0, T)
 %     rho - scalar between 0 and 1, double
 %       Parameter affecting the propensity function of recovery; the rate
 %       of change from I to R.
-%     X0 - (1x4) uint16 vector
+%     X0 - (1x4) uint16 vector <---- actually double but we could change this to marginally save memory
 %       The initial condition, X(t=0) = [S,E,I,R].
 %     T - scalar, double
 %       Determines the maximum extent of time the simulation computes,
