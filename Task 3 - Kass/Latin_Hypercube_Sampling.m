@@ -1,59 +1,59 @@
 clear
 %% 3D Latin Hypercube Sampling
-n = 27*2; % Number of samples
+n = 16; % Number of samples
 
-scale = (0:(1/n):1)'; scale(end) = []; 
-%^^ Marking the leftmost value of n many segments ∈[0,1), the leftmost...
-% value of Latin intervals
-lhs_order = [randperm(n)', randperm(n)', randperm(n)']; 
-%^^ Assigns all intervals one random number (unique to their hyperplane)
+% Demarcates the beginning of n many Latin intervals, in ∈[0,1)
+scale = (0:(1/n):1); scale(end) = []; 
+% Assigns all intervals one random number (unique to their hyperplane)
+lhs_order = [randperm(n); randperm(n); randperm(n)]'; 
 
 u = rand(n,3)/n; % Determines 3*n random numbers in a (1/n) square
-parameters = u + scale(lhs_order); % Shifts values into their intervals
-alpha_LHS = parameters(:,1);  
-beta_LHS = parameters(:,2);  
-rho_LHS = parameters(:,3);
+parameters_LHS = u + scale(lhs_order); % Shifts values into their intervals
+alpha_LHS = parameters_LHS(:,1);  
+beta_LHS = parameters_LHS(:,2);  
+rho_LHS = parameters_LHS(:,3);
 
 %% 3D Orthogonal Sampling
-subinterval = 3; % Number of subspaces along a single dimension
-subspace_count = subinterval^3; % Number of subspaces in three dimensions
-if mod(n,subspace_count) ~= 0
-    error("The number of samples n must be divisible amongst "... 
-       + string(subspace_count) + " subspaces (sub_interval^3).")
+d = 3; % Number of dimensions
+n = 27; % Number of samples, number of subspaces
+m = nthroot(n,d); % Length of subinterval. Cube root for 3 dimensions
+x = n/m; % Number of subspaces in hyperplane
+if floor(m)~=m
+    error("n must have an integer cube root.")
 end
-m = n / subspace_count; % Number of samples in a subspace
 
-u = rand(m,3,subspace_count); % Generating 3*m random numbers in...
-%...subspace_count many squares ∈[0,1]  (in total 3*n random numbers)
+scale = (0:(1/n):1); scale(end) = []; 
+% Demarcates the beginning of m many Latin intervals, in ∈[0,1)
+subscale = (0:(1/m):1); subscale(end) = []; 
+sampleorder = zeros(d,n);
+suborder = zeros(d,n);
 
-% Distributing samples to Latin Hypercubes--------------------------------]
-internal_scale = (0:1/m:1)'; internal_scale(end) = []; 
-internal_order = zeros(m,3);
-subspace = u/m; % Shrink to ∈[0, 1/m]
-for i = 1:subspace_count
-    for dimension = 1:3 % Assign intervals per LHS
-        internal_order(:,dimension) = randperm(m)';
+for i = 1:x
+    focus = m*(i-1)+1 : m*i;
+    for parameter = 1:d
+
+        sampleorder(parameter,focus) = randperm(m);
+        
+        if parameter == 1, val = 1:m;
+        elseif parameter == 2, val = mod(i-1,m)+1;
+        else, val = floor((i-1)/m)+1;
+        end
+        suborder(parameter,focus) = val;
+
     end
-    subspace(:,:,i) = subspace(:,:,i) + internal_scale(internal_order);
-    %^^ Shifts values into their intervals
 end
 
-% Distributing subspaces to Latin Hypercubes------------------------------]
-subspace_scale = (0:1/subinterval:1)'; subspace_scale(end) = []; 
-subspace_order = [randperm(subinterval)', randperm(subinterval)',...
-    + randperm(subinterval)']; % Only performed over one space, so no loop
-space = subspace/subinterval; % Shrink to ∈[0, 1/subinterval]
-parameters_O = zeros(n,3);
-for i = 1:subspace_count
-    % Converting from (m x 3 x subspace_count) to (m*subspace_count x 3)
-    space2list = [m*(i-1)+1, m*i];
-end
+%% bug testing
+
+
+
 
 %% Plotting
 % Only really works for low values of n_samples but hey! it makes sense!
 figure
 hold on 
-scatter3(alpha_LHS, beta_LHS, rho_LHS, '.')
+scatter3(parameters(:,1), parameters(:,2), parameters(:,3), '.')
 grid on
 xticks(0:1/n:1), xticklabels({})
 yticks(0:1/n:1), yticklabels({})
+view(3)
