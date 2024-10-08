@@ -13,39 +13,6 @@ alpha_LHS = parameters_LHS(:,1);
 beta_LHS = parameters_LHS(:,2);  
 rho_LHS = parameters_LHS(:,3);
 
-%% 3D Orthogonal Sampling
-d = 3; % Number of dimensions
-n = 27; % Number of samples, number of subspaces
-m = nthroot(n,d); % Length of subinterval. Cube root for 3 dimensions
-x = n/m; % Number of subspaces in hyperplane
-if floor(m)~=m
-    error("n must have an integer cube root.")
-end
-
-scale = (0:(1/n):1); scale(end) = []; 
-% Demarcates the beginning of m many Latin intervals, in ∈[0,1)
-subscale = (0:(1/m):1); subscale(end) = []; 
-sampleorder = zeros(d,n);
-suborder = zeros(d,n);
-
-% for i = 1:x
-%     focus = m*(i-1)+1 : m*i;
-%     for parameter = 1:d
-% 
-%         sampleorder(parameter,focus) = randperm(m);
-% 
-%         if parameter == 1, val = 1:m;
-%         elseif parameter == 2, val = mod(i-1,m)+1;
-%         else, val = floor((i-1)/m)+1;
-%         end
-%         suborder(parameter,focus) = val;
-%     end
-% end
-
-
-
-%% bug testing
-
 
 %% Plotting
 % Only really works for low values of n_samples but hey! it makes sense!
