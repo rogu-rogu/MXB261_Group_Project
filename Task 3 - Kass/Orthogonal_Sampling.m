@@ -30,7 +30,8 @@ function samples = Orthogonal_Sampling(n,d)
 
 % Initialising -----------------------------------------------------------]
 p = nthroot(n,d); % Number of subspace intervals
-if floor(p)~=p, error("n must have a positive integer cube root."), end
+if floor(p)~=p, error("n must have a positive integer d-th root. "...
++ sprintf("Try using nthroot(n,d) to check if it is an integer.")), end
 m = n/p; % Number of sample intervals (within subspaces)
 subscale = 0:(1/p):1; subscale(end) = []; % Marks the beginning position...
 %...of p many Latin intervals in ∈[0,1]. Positions subspaces in space
@@ -40,9 +41,13 @@ samplescale = 0:(1/m):1; samplescale(end) = []; % As above, but marks...
 % Constructs an organised list of subspaces ------------------------------]
 subco = 1:p; % Range of subspace positions within the space
 subspaces = zeros(n,d); % List of subspace indexes
-subspaces(:,1) = repelem(subco,m);              % Changes every m values
-subspaces(:,2) = repmat(repelem(subco,p),1,p);  % Changes every p values
-subspaces(:,3) = repmat(subco,1,m);             % Changes every value
+% subspaces(:,1) = repelem(subco,m);              % Changes every m values
+% subspaces(:,2) = repmat(repelem(subco,p),1,p);  % Changes every p values
+% subspaces(:,3) = repmat(subco,1,m);             % Changes every value
+for i = 1:d % Generates all possible d-tuples
+    val = repelem(subco, p^(i-1)); % Repeats elements in the vector subco
+    subspaces(:,i) = repmat(val,1,n/(p^i)); % Repeats above vector to fit
+end
 
 % Isolates hyperplanes of subspaces --------------------------------------]
 hyperplanes = false(n,d,p);
