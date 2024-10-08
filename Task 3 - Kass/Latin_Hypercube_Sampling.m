@@ -28,24 +28,23 @@ subscale = (0:(1/m):1); subscale(end) = [];
 sampleorder = zeros(d,n);
 suborder = zeros(d,n);
 
-for i = 1:x
-    focus = m*(i-1)+1 : m*i;
-    for parameter = 1:d
+% for i = 1:x
+%     focus = m*(i-1)+1 : m*i;
+%     for parameter = 1:d
+% 
+%         sampleorder(parameter,focus) = randperm(m);
+% 
+%         if parameter == 1, val = 1:m;
+%         elseif parameter == 2, val = mod(i-1,m)+1;
+%         else, val = floor((i-1)/m)+1;
+%         end
+%         suborder(parameter,focus) = val;
+%     end
+% end
 
-        sampleorder(parameter,focus) = randperm(m);
-        
-        if parameter == 1, val = 1:m;
-        elseif parameter == 2, val = mod(i-1,m)+1;
-        else, val = floor((i-1)/m)+1;
-        end
-        suborder(parameter,focus) = val;
 
-    end
-end
 
 %% bug testing
-
-
 
 
 %% Plotting
