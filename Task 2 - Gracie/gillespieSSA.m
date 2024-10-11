@@ -35,11 +35,11 @@ function [t, X] = gillespieSSA(alpha, beta, rho, X0, T)
     S = X0(1); E = X0(2); I = X0(3); R = X0(4); % Initial conditions 
     X = X0'; 
     t = 0;
-    nu = [-1 0 0; 1 -1 0; 0 1 -1; 0 0 1];  % Stoichiometric vectors
+    nu = [-1 0 0; 1 -1 0; 0 1 -1; 0 0 1]; % Stoichiometric vectors
 
     while t(end) < T
-        P = S + E + I + R;  % Total population
-        a = [alpha * S * I / P, beta * E, rho * I];  % Propensity functions
+        P = S + E + I + R; % Total population
+        a = [alpha * S * I / P, beta * E, rho * I]; % Propensity functions
         a0 = sum(a);
         
         % Sample the waiting time

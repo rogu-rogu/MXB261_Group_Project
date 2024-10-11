@@ -31,7 +31,7 @@ function samples = Orthogonal_Sampling(n,d)
 % Initialising -----------------------------------------------------------]
 p = nthroot(n,d); % Number of subspace intervals
 if floor(p)~=p, error("n must have a positive integer d-th root. "...
-+ sprintf("Try using nthroot(n,d) to check if it is an integer.")), end
++ "Try using nthroot(n,d) to check if it is an integer."), end
 m = n/p; % Number of sample intervals (within subspaces)
 subscale = 0:(1/p):1; subscale(end) = []; % Marks the beginning position...
 %...of p many Latin intervals in ∈[0,1]. Positions subspaces in space
@@ -62,7 +62,6 @@ end
 
 % Generates random samples -----------------------------------------------]
 u = rand(n,d); % Generates uniform random numbers (3*n for 3D)
-% Shrinks values into a (1/m) sidelength hypercube
 u_subspace = u/m + samplescale(samplespaces); % Shrinks values into a...
 %...(1/m) sidelength hypercube, then shifts values into their intervals, 
 % positions samples within a subspace
