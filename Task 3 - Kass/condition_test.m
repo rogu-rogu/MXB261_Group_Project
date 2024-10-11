@@ -1,4 +1,32 @@
 function sample_success = condition_test(samples, m, X0, T)
+% CONDITION_TEST - Tests an array of 3-tuple parameter values and outputs
+% the proportion of successful trials (for conditions provided by the
+% assignment).
+%
+%   sample_success = condition_test(samples,m,X0,T) iterates through the
+%   rows of samples, running m many trials for each parameter 3-tuple and
+%   determining success if cond1 or cond2 is true.
+%   * cond1: S(T) ∈ [S(0) - 20, S(10) - 10]
+%   * cond2: S(T) < S(0) - 100
+%
+%   Input Arguments
+%     samples - (n x 3) matrix, elements ∈[0,1] 
+%       3-tuple parameter samples, with all elements ranging from 0 to 1.
+%     m - integer
+%       Number of trials; the number of times the Gillespie stochastic
+%       simulation algorithm generates a new set of values.
+%     X0 - (1 x 4) vector
+%       The initial condition, X(t=0) = [S,E,I,R].
+%     T - scalar
+%       Determines the maximum extent of time the simulation computes,
+%       modelling from t=0 to t=T.
+%
+%   Output Arguments
+%     sample_success - (n x 1) matrix, elements ∈[0,1] 
+%       The proportion of successful trials for a given paramater sample.
+
+
+%% Test samples
 testtimes = [0, 10, T];
 n = size(samples,1);
 sample_success = zeros(n,1);

@@ -11,25 +11,25 @@ function [t, X] = gillespieSSA(alpha, beta, rho, X0, T)
 %   probability.
 %
 %   Input Arguments
-%     alpha - scalar between 0 and 1, double
+%     alpha - scalar between 0 and 1
 %       Parameter affecting the propensity function of exposure; the rate
 %       of change from S to E
-%     beta - scalar between 0 and 1, double
+%     beta - scalar between 0 and 1
 %       Paramater affecting the propensity function of infection (referring
 %       to the end of the latent period); the rate of change from E to I
 %     rho - scalar between 0 and 1, double
 %       Parameter affecting the propensity function of recovery; the rate
 %       of change from I to R.
-%     X0 - (1x4) uint16 vector <---- actually double but we could change this to marginally save memory
+%     X0 - (1 x 4) vector 
 %       The initial condition, X(t=0) = [S,E,I,R].
-%     T - scalar, double
+%     T - double scalar
 %       Determines the maximum extent of time the simulation computes,
 %       modelling from t=0 to t=T.
 %
 %   Output Arguments
-%     t - (1x?) double matrix
+%     t - (1 x ?) matrix
 %       Time values associated with each state X(t).
-%     X - (4x?) double matrix
+%     X - (4 x ?) matrix
 %       State vector over time (row 1 = S, row 2 = E, row 3 = I, row 4 = R)
 
     S = X0(1); E = X0(2); I = X0(3); R = X0(4); % Initial conditions 
