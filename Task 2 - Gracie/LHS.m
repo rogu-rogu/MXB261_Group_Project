@@ -3,7 +3,7 @@ clear all
 S0 = 990; E0 = 0; I0 = 10; R0 = 0;
 beta = 1/14;% Given
 T = 360;  % Period
-n_samples = 1000;  % Number of LHS samples
+n_samples = 10;  % Number of LHS samples
 
 lhs_samples_new = [rand(n_samples,1),rand(n_samples,1)];
 alphas_new = lhs_samples_new(:, 1);  % Alpha samples
@@ -47,31 +47,11 @@ legend('show');
 title('Successful Parameter Combinations: \alpha vs \rho');
 hold off;
 
-% Gillespie SSA function
-function [t, X] = gillespieSSA(alpha, beta, rho, X0, T)
-    % Stochastic SEIR model using Gillespie algorithm
-    S = X0(1); E = X0(2); I = X0(3); R = X0(4);
-    X = X0';
-    t = 0;
-    
-    nu = [-1 0 0; 1 -1 0; 0 1 -1; 0 0 1];  % State transitions
-    while t(end) < T
-        N = S + E + I + R;  % Total population
-        a = [alpha * S * I / N, beta * E, rho * I];  % Propensity functions
-        a0 = sum(a);
-        
-        % Sample the waiting time
-        dt = -log(rand) / a0;
-        t(end+1) = t(end) + dt;
-        if t(end) > T, break; end
-        
-        % Determine which reaction occurs
-        P = cumsum(a) / a0;
-        r2 = rand;
-        j = find(r2 < P, 1);
-        
-        % Update state
-        X = [X, X(:,end) + nu(:,j)];
-        S = X(1, end); E = X(2, end); I = X(3, end); R = X(4, end);
-    end
-end
+%% Plotting Latin Hypercube
+% % Only really works for low values of n_samples but hey! it makes sense!
+% figure
+% hold on 
+% scatter(alphas_new, rhos_new,'.')
+% grid on
+% xticks(0:1/n_samples:1), xticklabels({})
+% yticks(0:1/n_samples:1), yticklabels({})
