@@ -52,19 +52,3 @@ title('relationship between S and alpha')
 subtitle('after 360 days')
 xlabel('alpha value')
 ylabel('Susceptible subpopulation')
-%% extra stuff that will be removed
-rho_range = 0.025:(0.05-0.025):1;
-alpha_range = 0.025:(0.05-0.025):1;
-R = zeros(length(alpha_range),length(rho_range));
-for j = 1:length(rho_range)
-    for i = 1:length(alpha_range)
-        [t_ode,X_ode] = ode45(@(t,X) Epidemic_ode(t,X,alpha_range(i),beta,rho_range(j)),t_span,X_IC);
-        R(i,j) = X_ode(end,1);
-    end
-end
-figure
-mesh(alpha_range,rho_range,R)
-xlabel('\rho')
-ylabel('\alpha')
-zlabel('S(360)')
-title('Affect of transmission and recovery rate on final S sub-pop')
