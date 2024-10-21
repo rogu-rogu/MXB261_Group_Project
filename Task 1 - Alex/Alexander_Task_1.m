@@ -49,6 +49,6 @@ for i = 1:length(alpha_range)
 end
 plot(alpha_range,S)
 title('relationship between S and alpha')
-subtitle('after 360 days')
+subtitle("t = " + 360 + ", \beta = " + beta + ", \rho = " + rho)
 xlabel('alpha value')
 ylabel('Susceptible subpopulation')
