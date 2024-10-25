@@ -1,5 +1,5 @@
-function population_display(t,X,method,disp_type)
-if nargin == 3
+function population_display(t,X,method,alpha,beta,rho,disp_type)
+if nargin == 6
     disp_type = 2;
 end
 if disp_type == 1
@@ -20,15 +20,16 @@ if disp_type == 1
     xlabel('Time (days)')
     sgtxt = [method ' method'];
     sgtitle(sgtxt)
-    subtitle('')
+    subtitle(" \alpha = " + alpha + ", \beta = " + beta + ", \rho = " + rho)
 elseif disp_type == 2
     figure
-    plot(t,X)
+    plot(t,X,'LineWidth',1)
     ylabel('Subpopulation (people)')
     xlabel('Time (days)')
     legend('S','E','I','R')
     sgtxt = [method ' method'];
     title(sgtxt)
+    subtitle(" \alpha = " + alpha + ", \beta = " + beta + ", \rho = " + rho)
 end
 
 end
