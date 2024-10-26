@@ -21,23 +21,24 @@ X_IC = [990,0,10,0];
 %ode45 expects y(t,y) for the input order of the function
 [t_ode,X_ode] = ode45(@(t,X) Epidemic_ode(t,X,alpha,beta,rho),t_span,X_IC);
 population_display(t_ode,X_ode,'ode45',alpha,beta,rho)
-%% alpha = 10
+%% alpha = 10 and find differences
 alpha = 10;
 X_IC = [990,0,10,0];
 [t_euler, X_euler] = Euler_method_Epidemic(t_span,X_IC,alpha,beta,rho,0.5);
 [t_ode,X_ode] = ode45(@(t,X) Epidemic_ode(t,X,alpha,beta,rho),t_span,X_IC);
 %display Euler Solution
-population_display(t_euler,X_euler,'Euler',alpha,beta,rho)
+population_display(t_euler,X_euler,'Euler',alpha,beta,rho,100)
 %display ode45 ssolution
-population_display(t_ode,X_ode,'ode45',alpha,beta,rho)
+population_display(t_ode,X_ode,'ode45',alpha,beta,rho,100)
 %display X1 - X2, individual difference within S,E,I,R
-population_display(t_ode,X_ode-X_euler,'Difference of each',alpha,beta,rho)
+population_display(t_ode,X_ode-X_euler,'Difference of each',alpha,beta,rho,100)
 %convert into a vector
 X_diff = vecnorm(X_ode - X_euler,1,2);
 figure
 plot(t_euler,X_diff)
 ylabel('||X_{ode45} - X_{euler}||')
 xlabel('Time (days)')
+xlim([0 100])
 title('Norm of difference per day')
 %% range of alpha 
 alpha_range = 0.025:(0.05-0.025):1;
