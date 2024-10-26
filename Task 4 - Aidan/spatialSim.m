@@ -18,7 +18,7 @@ R0 = 0;
 P = S0 + I0 + E0 + R0;
 
 % Set maximum simulation Time
-maxSimTime = 100;
+maxSimTime = 400;
 
 % Initialise state trackers
 S = zeros(1, maxSimTime);
@@ -55,11 +55,8 @@ end
 bridgeLocations = randperm(gridxLength);
 gridSpace(riverLocation, bridgeLocations(1:B)) = 0;
 
-% define time step
-deltat = 1;
-
 % Setup video
-writerObj = VideoWriter(num2str(alpha)+"regime"+num2str(B)+"bridges.avi");
+writerObj = VideoWriter(num2str(alpha)+"alpha"+num2str(rho)+"rho"+num2str(B)+"bridges.avi");
 writerObj.FrameRate = 10;
 open(writerObj);
 
@@ -70,7 +67,7 @@ for i = 1:maxSimTime
     % Move agents
     for j = 1:P
         direction = rand;
-        if direction < 0.25 % Move North
+        if direction < 0.25 % Move South
             if (posStateMatrix(j,2)-1) >= 1
                 if gridSpace(posStateMatrix(j,2)-1, posStateMatrix(j,1)) == 0
                     gridSpace(posStateMatrix(j,2)-1, posStateMatrix(j,1)) = 1;
@@ -78,7 +75,7 @@ for i = 1:maxSimTime
                     posStateMatrix(j,2) = posStateMatrix(j,2)-1;
                 end
             end
-        elseif direction < 0.5 % Move South
+        elseif direction < 0.5 % Move North
             if (posStateMatrix(j,2)+1) <= 101
                 if gridSpace(posStateMatrix(j,2)+1, posStateMatrix(j,1)) == 0
                     gridSpace(posStateMatrix(j,2)+1, posStateMatrix(j,1)) = 1;
@@ -86,7 +83,7 @@ for i = 1:maxSimTime
                     posStateMatrix(j,2) = posStateMatrix(j,2)+1;
                 end
             end
-        elseif direction < 0.75 % Move East
+        elseif direction < 0.75 % Move West
             if (posStateMatrix(j,1)+1) <= 101
                 if gridSpace(posStateMatrix(j,2), posStateMatrix(j,1)+1) == 0
                     gridSpace(posStateMatrix(j,2), posStateMatrix(j,1)+1) = 1;
@@ -94,7 +91,7 @@ for i = 1:maxSimTime
                     posStateMatrix(j,1) = posStateMatrix(j,1)+1;
                 end
             end
-        else % Move West
+        else % Move East
             if (posStateMatrix(j,1)-1) >= 1
                 if gridSpace(posStateMatrix(j,2), posStateMatrix(j,1)-1) == 0
                     gridSpace(posStateMatrix(j,2), posStateMatrix(j,1)-1) = 1;
@@ -117,16 +114,16 @@ for i = 1:maxSimTime
             %  Infect a neighbour
             if rand <= alpha
                 infectDirection = rand;
-                if infectDirection < 0.25 % Infect North
+                if infectDirection < 0.25 % Infect South
                     findPosState = [posStateMatrix(j,1) posStateMatrix(j, 2)-1 1];
                     findPosStateIndex = find(ismember(posStateMatrix,findPosState,'rows'));
-                elseif infectDirection < 0.5 % Infect South
+                elseif infectDirection < 0.5 % Infect North
                     findPosState = [posStateMatrix(j,1) posStateMatrix(j, 2)+1 1];
                     findPosStateIndex = find(ismember(posStateMatrix,findPosState,'rows'));
-                elseif infectDirection < 0.75 % infect East
+                elseif infectDirection < 0.75 % infect West
                     findPosState = [posStateMatrix(j,1) posStateMatrix(j, 2)+1 1];
                     findPosStateIndex = find(ismember(posStateMatrix,findPosState,'rows'));
-                else % Infect West
+                else % Infect East
                     findPosState = [posStateMatrix(j,1) posStateMatrix(j, 2)+1 1];
                     findPosStateIndex = find(ismember(posStateMatrix,findPosState,'rows'));
                 end
@@ -158,14 +155,27 @@ for i = 1:maxSimTime
         'o','LineWidth',4,'MarkerSize',4,'Color',[0.8500 0.3250 0.0980])
     plot(posStateMatrix(posStateMatrix(:,3) == 4, 1), posStateMatrix(posStateMatrix(:,3) == 4, 2), ...
         'o','LineWidth',4,'MarkerSize',4,'Color',[0 0.4470 0.7410])
-    legend('Susceptible', 'Exposed', 'Infectious', 'Recovered')
+    % Fix Legend
+    legendentries = zeros(4,1);
+    legendentries(1) = plot(nan,nan,'o','LineWidth',4,'MarkerSize',4,'Color',[0.4660 0.6740 0.1880]);
+    legendentries(2) = plot(nan,nan,'o','LineWidth',4,'MarkerSize',4,'Color',[0.9290 0.6940 0.1250]);
+    legendentries(3) = plot(nan,nan,'o','LineWidth',4,'MarkerSize',4,'Color',[0.8500 0.3250 0.0980]);
+    legendentries(4) = plot(nan,nan,'o','LineWidth',4,'MarkerSize',4,'Color',[0 0.4470 0.7410]);
+    legend(legendentries,'Susceptible', 'Exposed', 'Infectious', 'Recovered', 'Location', 'southeast')
     xlabel("X Position"); ylabel("Y Position")
-    xlim([0 gridxLength]) % Set grid size
-    ylim([0 gridyLength])
-    yregion(riverLocation-0.5, riverLocation+0.5)
+    xlim([0 gridxLength+1]) % Set grid size
+    ylim([0 gridyLength+1])
+    yregion(riverLocation-0.5, riverLocation+0.5, "HandleVisibility","off")
     box on
-    frame = getframe;
+    frame = getframe(gcf);
     writeVideo(writerObj,frame);
+
+    % End if reaeches equilibrium
+    if all((E(i)==0) & (I(i)==0))
+        S((i+1):end) = S(i);
+        R((i+1):end) = R(i);
+        break
+    end
 
 end
 
@@ -177,15 +187,5 @@ S = [S0 S];
 E = [E0 E];
 I = [I0 I];
 R = [R0 R];
-
-% Plot populations
-hold on
-plot(0:deltat:maxSimTime, S);
-plot(0:deltat:maxSimTime, E);
-plot(0:deltat:maxSimTime, I);
-plot(0:deltat:maxSimTime, R);
-xlabel("Time"); ylabel("Number of Agents")
-title("\alpha = "+num2str(alpha)+", \beta = "+num2str(beta)+", \rho = "+num2str(rho), ", "+num2str(B)+" Bridges")
-legend('Susceptible', 'Exposed', 'Infectious', 'Recovered')
 
 end
