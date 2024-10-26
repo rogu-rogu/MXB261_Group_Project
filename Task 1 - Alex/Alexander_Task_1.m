@@ -52,3 +52,13 @@ title('relationship between S and alpha')
 subtitle("t = " + 360 + ", \beta = " + beta + ", \rho = " + rho)
 xlabel('alpha value')
 ylabel('Susceptible subpopulation')
+
+%% range of alpha vs unstability value for associated alpha
+figure
+plot(alpha_range,S,DisplayName="Determinstic ODE solution for S(360)")
+hold on
+plot(alpha_range(alpha_range>0.09),P*rho./alpha_range(alpha_range>0.09),DisplayName="Population of S(360) required for unstability")
+legend(Location='best')
+title('Determinstic solution of final Susceptible pop. and unstable required pop.')
+xlabel('\alpha')
+ylabel('S(360)')
