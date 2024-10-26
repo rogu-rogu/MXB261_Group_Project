@@ -1,4 +1,14 @@
 function population_display(t,X,method,alpha,beta,rho,xlimits,disp_type)
+%inputs:
+%{
+t - time range
+X - matrix of population [ S(t) | E(t) | I(t) | R(t) ]
+method - string with method that will be added to title
+alpha, beta, rho - rate paramters for SEIR ODE
+xlimits - upper limit for x axis
+disp_type - show each sub-population on a separate sub-figure (0) or all on one
+figure (1)
+%}
 if nargin == 6
     usinglims = 0;
 else

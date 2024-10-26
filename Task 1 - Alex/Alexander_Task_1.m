@@ -53,8 +53,7 @@ title('relationship between S and alpha')
 subtitle("t = " + 360 + ", \beta = " + beta + ", \rho = " + rho)
 xlabel('alpha value')
 ylabel('Susceptible subpopulation')
-
-%% range of alpha vs unstability value for associated alpha
+%% range of alpha against unstability value for associated alpha
 figure
 plot(alpha_range,S,DisplayName="Determinstic ODE solution for S(360)")
 hold on
